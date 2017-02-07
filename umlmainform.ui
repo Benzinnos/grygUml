@@ -34,7 +34,7 @@
         <x>0</x>
         <y>0</y>
         <width>250</width>
-        <height>542</height>
+        <height>544</height>
        </rect>
       </property>
       <attribute name="label">
@@ -42,21 +42,21 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="addRectangleButton">
          <property name="text">
           <string>Прямоугольник</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="addLineButton">
          <property name="text">
           <string>Линия</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="saveAsPictureButton">
          <property name="text">
           <string>Сохранить как картинку</string>
          </property>
@@ -82,8 +82,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>500</width>
-        <height>542</height>
+        <width>250</width>
+        <height>544</height>
        </rect>
       </property>
       <attribute name="label">

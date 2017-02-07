@@ -18,10 +18,15 @@ class UmlMainWidget : public QWidget, Ui_Form
 
 public:
     explicit UmlMainWidget(QWidget *parent = 0);
+    ~UmlMainWidget();
 
 signals:
 
 public slots:
+    bool onAddRectangle();
+    bool onSaveAsPicture();
+    void onAddLine();
+    bool onLineCreated(DomainArrow* arrow);
 };
 
 #endif // UMLMAINWIDGET_H
