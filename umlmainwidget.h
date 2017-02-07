@@ -6,19 +6,21 @@
 #include <QGraphicsView>
 
 #include "components/scenes/domainscene.h"
-#include "components/primitives/domainitem.h"
 #include "ui_umlmainform.h"
+#include "umlapi.h"
 
 class UmlMainWidget : public QWidget, Ui_Form
 {
     Q_OBJECT
 
     DomainScene* _scene;
-    DomainItem* _item;
 
 public:
     explicit UmlMainWidget(QWidget *parent = 0);
     ~UmlMainWidget();
+
+    UmlApi* api;
+    bool savePicture(QString fileName);
 
 signals:
 

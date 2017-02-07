@@ -7,6 +7,7 @@
 class DomainArrow : public QGraphicsLineItem
 {
 public:
+  enum { Type = UserType + 2 };
   explicit DomainArrow(QGraphicsItem* startItem, QGraphicsItem* endItem, QGraphicsItem* parent = nullptr);
 
   // QGraphicsItem interface
@@ -32,6 +33,10 @@ private:
   QString _containedText;
   qreal _arrowSize = 10;
 
+
+  // QGraphicsItem interface
+public:
+  virtual int type() const override;
 };
 
 #endif // DOMAINARROW_H

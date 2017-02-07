@@ -9,6 +9,7 @@
 class DomainItem : public QGraphicsItem
 {
 public:
+    enum { Type = UserType + 1 };
     DomainItem();
     ~DomainItem();
 
@@ -34,6 +35,10 @@ private:
     // QGraphicsItem interface
 protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+
+    // QGraphicsItem interface
+public:
+    virtual int type() const override;
 };
 
 #endif // DOMAINITEM_H

@@ -16,7 +16,7 @@ public:
   void setMode(int mode);
 
 public slots:
-//  bool saveImage(const QString &fileName, const char *fileFormat);
+  bool saveImage(const QString &fileName, const char *fileFormat);
 
   // QGraphicsScene interface
 protected:

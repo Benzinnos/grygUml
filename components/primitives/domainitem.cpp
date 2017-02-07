@@ -95,3 +95,9 @@ QVariant DomainItem::itemChange(GraphicsItemChange change, const QVariant &value
 
   return value;
 }
+
+
+int DomainItem::type() const
+{
+    return Type;
+}

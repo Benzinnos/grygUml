@@ -28,13 +28,15 @@ SOURCES += main.cpp\
     umlmainwidget.cpp \
     components/scenes/domainscene.cpp \
     components/primitives/domainitem.cpp \
-    components/primitives/domainarrow.cpp
+    components/primitives/domainarrow.cpp \
+    umlapi.cpp
 
 HEADERS  += mainwindow.h \
     umlmainwidget.h \
     components/scenes/domainscene.h \
     components/primitives/domainitem.h \
-    components/primitives/domainarrow.h
+    components/primitives/domainarrow.h \
+    umlapi.h
 
 FORMS += \
     umlmainform.ui

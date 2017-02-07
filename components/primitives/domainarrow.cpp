@@ -113,3 +113,9 @@ void DomainArrow::updatePosition()
   QLineF line(mapFromItem(_myStartItem, 0, 0), mapFromItem(_myEndItem, 0, 0));
   setLine(line);
 }
+
+
+int DomainArrow::type() const
+{
+    return Type;
+}

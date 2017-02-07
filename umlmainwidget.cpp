@@ -4,17 +4,16 @@
 
 UmlMainWidget::UmlMainWidget(QWidget *parent) : QWidget(parent)
 {
-  setupUi(this);
-
   _scene = new DomainScene();
-  _item = new DomainItem();
-
+  api = new UmlApi(_scene, this);
+  setupUi(this);
   graphicsView->setScene(_scene);
+
 
   connect(addRectangleButton, &QPushButton::clicked, this, &UmlMainWidget::onAddRectangle);
   connect(saveAsPictureButton, &QPushButton::clicked, this, &UmlMainWidget::onSaveAsPicture);
   connect(addLineButton, &QPushButton::clicked, this, &UmlMainWidget::onAddLine);
-  connect(_scene, &DomainScene::lineCreated, this, &UmlMainWidget::onLineCreated);
+  connect(_scene, &DomainScene::lineCreated, this, &UmlMainWidget::onLineCreated); 
 }
 
 UmlMainWidget::~UmlMainWidget()
@@ -44,9 +43,7 @@ bool UmlMainWidget::onSaveAsPicture()
   QString fileName = QFileDialog::getSaveFileName(this, "Сохранить рисунок", QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)");
   if (!fileName.isNull())
   {
-    QPixmap pixMap = this->graphicsView->grab();
-    pixMap.save(fileName);
-    return true;
+      savePicture(fileName);
   }
   return false;
 }
@@ -72,4 +69,10 @@ bool UmlMainWidget::onLineCreated(DomainArrow *arrow)
 
     return false;
   }
+}
+
+bool UmlMainWidget::savePicture(QString fileName)
+{
+    QPixmap pixMap = this->graphicsView->grab();
+    return pixMap.save(fileName);
 }

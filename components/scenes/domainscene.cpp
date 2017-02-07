@@ -8,23 +8,23 @@ DomainScene::DomainScene()
 {
 }
 
-//bool DomainScene::saveImage(const QString &fileName, const char *fileFormat)
-//{
-//    clearSelection();
-////    setSceneRect(itemsBoundingRect());
-//    QImage image(sceneRect().size().toSize(), QImage::Format_ARGB32);
-//    image.fill(Qt::white);
+bool DomainScene::saveImage(const QString &fileName, const char *fileFormat)
+{
+    clearSelection();
+    setSceneRect(itemsBoundingRect());
+    QImage image(sceneRect().size().toSize(), QImage::Format_ARGB32);
+    image.fill(Qt::white);
 
-//    QPainter painter(&image);
-//    render(&painter);
+    QPainter painter(&image);
+    render(&painter);
 
-//    if (image.save(fileName + ".png"))
-//    {
-//        return true;
-//    }
-//    else
-//        return false;
-//}
+    if (image.save(fileName, fileFormat)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
 
 void DomainScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
