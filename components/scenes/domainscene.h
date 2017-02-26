@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QGraphicsScene>
+#include <QDataStream>
 #include "../primitives/domainitem.h"
 #include "../primitives/domainarrow.h"
 
@@ -17,6 +18,8 @@ public:
 
 public slots:
   bool saveImage(const QString &fileName, const char *fileFormat);
+  void writeItemsToBinaryStream(QDataStream &out);
+  void readItemsFromBinaryStream(QDataStream &in);
 
   // QGraphicsScene interface
 protected:

@@ -6,6 +6,9 @@
 
 class DomainArrow : public QGraphicsLineItem
 {
+  friend QDataStream &operator<<(QDataStream &out, const DomainArrow &domainArrow);
+  friend QDataStream &operator>>(QDataStream &in, DomainArrow &domainArrow);
+
 public:
   enum { Type = UserType + 2 };
   explicit DomainArrow(QGraphicsItem* startItem, QGraphicsItem* endItem, QGraphicsItem* parent = nullptr);
@@ -18,6 +21,8 @@ public:
 
   QGraphicsItem* startItem() const { return _myStartItem; }
   QGraphicsItem* endItem() const { return _myEndItem; }
+  QString startItemContainedText() const;
+  QString endItemContainedText() const;
   void updatePosition();
 
   QString containedText() const;
@@ -31,12 +36,16 @@ private:
   QGraphicsItem* _myEndItem;
   QPolygonF _arrowHead;
   QString _containedText;
-  qreal _arrowSize = 10;
-
+  qreal _arrowSize = 8;
+  QPointF _startItemPosition;
+  QPointF _endItemPosition;
 
   // QGraphicsItem interface
 public:
   virtual int type() const override;
 };
+
+QDataStream &operator<<(QDataStream &out, const DomainArrow &domainArrow);
+QDataStream &operator>>(QDataStream &in, DomainArrow &domainArrow);
 
 #endif // DOMAINARROW_H

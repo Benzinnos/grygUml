@@ -17,11 +17,21 @@ DomainArrow::DomainArrow(QGraphicsItem *startItem, QGraphicsItem *endItem, QGrap
 QRectF DomainArrow::boundingRect() const
 {
   qreal extra = (pen().width() + 20) / 2.0;
+//  return QRectF(0, 0, _containedText.size()*7/* Типо fontSize */, 15 /* Высота шрифта + смещение? */);
 
-  return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
-                                    line().p2().y() - line().p1().y()))
-      .normalized()
-      .adjusted(-extra, -extra, extra, extra);
+  QRectF retRect = QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
+                                     line().p2().y() - line().p1().y()))
+       .normalized()
+       .adjusted(-extra, -extra, extra, extra);
+
+  QRectF textRect(line().pointAt(0.5).x(), line().pointAt(0.5).y(), _containedText.size()*7/* Типо fontSize */, 15 /* Высота шрифта + смещение? */);
+
+  return retRect.united(textRect);
+
+//  return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
+//                                    line().p2().y() - line().p1().y()))
+//      .normalized()
+//      .adjusted(-extra, -extra, extra, extra);
 }
 
 void DomainArrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -29,40 +39,50 @@ void DomainArrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
   Q_UNUSED(option);
   Q_UNUSED(widget);
 
+   _startItemPosition = _myStartItem->pos();
+   _endItemPosition = _myEndItem->pos();
+
   if (_myStartItem->collidesWithItem(_myEndItem))
       return;
 
-  QLineF centerLine(_myStartItem->pos(), _myEndItem->pos());
-  QPolygonF endPolygon = _myEndItem->boundingRect();
-  QPointF p1 = endPolygon.first() + _myEndItem->pos();
-  QPointF p2;
-  QPointF intersectPoint;
-  QLineF polyLine;
-  for (int i = 1; i < endPolygon.count(); ++i) {
-      p2 = endPolygon.at(i) + _myEndItem->pos();
-      polyLine = QLineF(p1, p2);
-      QLineF::IntersectType intersectType =
-          polyLine.intersect(centerLine, &intersectPoint);
-      if (intersectType == QLineF::BoundedIntersection)
-          break;
-      p1 = p2;
-  }
+//  QLineF centerLine(_myStartItem->pos(), _myEndItem->pos());
+//  QPolygonF endPolygon = _myEndItem->boundingRect();
+//  QPointF p1 = endPolygon.first() + _myEndItem->pos();
+//  QPointF p2;
+//  QPointF intersectPoint;
+//  QLineF polyLine;
+//  for (int i = 1; i < endPolygon.count(); ++i) {
+//      p2 = endPolygon.at(i) + _myEndItem->pos();
+//      polyLine = QLineF(p1, p2);
+//      QLineF::IntersectType intersectType =
+//          polyLine.intersect(centerLine, &intersectPoint);
+//      if (intersectType == QLineF::BoundedIntersection)
+//          break;
+//      p1 = p2;
+//  }
 
-  setLine(QLineF(intersectPoint, _myStartItem->pos()));
+//  setLine(QLineF(intersectPoint, _myStartItem->pos()));
+
+  QRectF rectStart(_myStartItem->pos(), _myStartItem->boundingRect().size());
+  QPointF p1 = rectStart.center();
+  QRectF rectEnd(_myEndItem->pos(), _myEndItem->boundingRect().size());
+  QPointF p2 = rectEnd.center();
+  setLine(QLineF(p1, p2));
 
   double angle = ::acos(line().dx() / line().length());
   if (line().dy() >= 0)
       angle = (M_PI * 2) - angle;
 
-  QPointF arrowP1 = line().p1() + QPointF(sin(angle + M_PI / 3) * _arrowSize,
+  QPointF arrowP1 = line().pointAt(0.5) + QPointF(sin(angle + M_PI / 3) * _arrowSize,
                                   cos(angle + M_PI / 3) * _arrowSize);
-  QPointF arrowP2 = line().p1() + QPointF(sin(angle + M_PI - M_PI / 3) * _arrowSize,
+  QPointF arrowP2 = line().pointAt(0.5) + QPointF(sin(angle + M_PI - M_PI / 3) * _arrowSize,
                                   cos(angle + M_PI - M_PI / 3) * _arrowSize);
 
   _arrowHead.clear();
-  _arrowHead << line().p1() << arrowP1 << arrowP2;
+  _arrowHead << line().pointAt(0.5) << arrowP1 << arrowP2;
 
   painter->drawLine(line());
+  painter->setPen(QPen(Qt::black, 5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
   painter->drawPolygon(_arrowHead);
 
 //  _arrowHead.fill();
@@ -76,7 +96,14 @@ void DomainArrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
       painter->drawLine(myLine);
   }
 
-  painter->drawText(boundingRect(), _containedText);
+//  QGraphicsTextItem text(_containedText);
+//  painter->draw
+//  painter->drawTextItem(line().pointAt(0.5), text);
+
+  QPointF textPoint(line().pointAt(0.5));
+  textPoint.setX(textPoint.x() + 15);
+  textPoint.setY(textPoint.y() - 3);
+  painter->drawText(textPoint, _containedText);
 }
 
 void DomainArrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
@@ -89,6 +116,7 @@ void DomainArrow::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     _containedText = str;
   }
 }
+
 
 QString DomainArrow::containedText() const
 {
@@ -108,14 +136,38 @@ QPainterPath DomainArrow::shape() const
   return path;
 }
 
+
 void DomainArrow::updatePosition()
 {
-  QLineF line(mapFromItem(_myStartItem, 0, 0), mapFromItem(_myEndItem, 0, 0));
-  setLine(line);
+    QLineF line(mapFromItem(_myStartItem, 0, 0), mapFromItem(_myEndItem, 0, 0));
+    setLine(line);
 }
 
 
 int DomainArrow::type() const
 {
     return Type;
+}
+
+
+QDataStream &operator<<(QDataStream &out, const DomainArrow &domainArrow)
+{
+  out << domainArrow._myStartItem->pos()
+      << domainArrow._myEndItem->pos()
+      << domainArrow.containedText();
+
+  return out;
+}
+
+
+QDataStream &operator>>(QDataStream &in, DomainArrow &domainArrow)
+{
+  QString containedText;
+
+  /* Позиции начального и конечного элементов считываются при создании объекта */
+  in >> containedText;
+
+  domainArrow._containedText = containedText;
+
+  return in;
 }

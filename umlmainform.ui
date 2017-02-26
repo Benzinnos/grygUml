@@ -34,7 +34,7 @@
         <x>0</x>
         <y>0</y>
         <width>250</width>
-        <height>544</height>
+        <height>542</height>
        </rect>
       </property>
       <attribute name="label">
@@ -52,6 +52,20 @@
         <widget class="QPushButton" name="addLineButton">
          <property name="text">
           <string>Линия</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveBinaryButton">
+         <property name="text">
+          <string>Сохранить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="loadBinaryButton">
+         <property name="text">
+          <string>Открыть</string>
          </property>
         </widget>
        </item>
@@ -83,7 +97,7 @@
         <x>0</x>
         <y>0</y>
         <width>250</width>
-        <height>544</height>
+        <height>542</height>
        </rect>
       </property>
       <attribute name="label">

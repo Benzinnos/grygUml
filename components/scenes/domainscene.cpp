@@ -10,27 +10,80 @@ DomainScene::DomainScene()
 
 bool DomainScene::saveImage(const QString &fileName, const char *fileFormat)
 {
-    clearSelection();
-    setSceneRect(itemsBoundingRect());
-    QImage image(sceneRect().size().toSize(), QImage::Format_ARGB32);
-    image.fill(Qt::white);
+  clearSelection();
+  setSceneRect(itemsBoundingRect());
+  QImage image(sceneRect().size().toSize(), QImage::Format_ARGB32);
+  image.fill(Qt::white);
 
-    QPainter painter(&image);
-    render(&painter);
+  QPainter painter(&image);
+  render(&painter);
 
-    if (image.save(fileName, fileFormat)) {
-        return true;
+  if (image.save(fileName, fileFormat)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+void DomainScene::writeItemsToBinaryStream(QDataStream &out)
+{
+  // TODO Шаблонный метод
+  foreach (QGraphicsItem* it, items()) {
+    out << static_cast<quint32>(it->type());
+    switch (it->type()) {
+    case DomainItem::Type:
+      out << *qgraphicsitem_cast<DomainItem*>(it);
+      break;
+    case DomainArrow::Type:
+      out << *qgraphicsitem_cast<DomainArrow*>(it);
+      break;
+    default:
+      break;
     }
-    else {
-        return false;
+  }
+}
+
+void DomainScene::readItemsFromBinaryStream(QDataStream &in)
+{
+  clear();
+
+  // TODO Шаблонный метод
+  // Список должен быть отсортирован. Элементы типа DomainItem должны быть первыми для корректного создания DomainArrow.
+  while(!in.atEnd()) {
+    quint32 type;
+    in >> type;
+    switch (static_cast<int>(type)) {
+    case DomainItem::Type: {
+      DomainItem *domainItem = new DomainItem();
+      in >> *domainItem;
+      addItem(domainItem);
+      break;
     }
+    case DomainArrow::Type: {
+      QPointF firstItemPosition;
+      QPointF endItemPosition;
+      in >> firstItemPosition
+         >> endItemPosition;
+      DomainArrow *domainArrow = new DomainArrow(itemAt(firstItemPosition, QTransform()), itemAt(endItemPosition, QTransform()));
+      in >> *domainArrow;
+      qgraphicsitem_cast<DomainItem*>(itemAt(firstItemPosition, QTransform()))->addArrow(domainArrow);
+      qgraphicsitem_cast<DomainItem*>(itemAt(endItemPosition, QTransform()))->addArrow(domainArrow);
+      addItem(domainArrow);
+      break;
+    }
+    default:
+      break;
+    }
+  }
+
 }
 
 
 void DomainScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
   if (event->button() != Qt::LeftButton)
-      return;
+    return;
 
   if (_mode == InsertLine) {
     QList<QGraphicsItem*> list = items(event->scenePos());
@@ -42,7 +95,7 @@ void DomainScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
   }
   else {
-     QGraphicsScene::mousePressEvent(event);
+    QGraphicsScene::mousePressEvent(event);
   }
 }
 

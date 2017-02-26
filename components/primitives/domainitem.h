@@ -41,4 +41,7 @@ public:
     virtual int type() const override;
 };
 
+QDataStream &operator<<(QDataStream &out, const DomainItem &domainItem);
+QDataStream &operator>>(QDataStream &in, DomainItem &domainItem);
+
 #endif // DOMAINITEM_H

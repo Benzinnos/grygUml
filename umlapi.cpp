@@ -1,6 +1,8 @@
 #include "umlapi.h"
 #include <qDebug>
 #include "umlmainwidget.h"
+#include <QFile>
+#include <QDataStream>
 
 UmlApi::UmlApi(DomainScene *scene, QObject *parent)
     : _scene(scene), _parent(parent)
@@ -139,4 +141,30 @@ bool UmlApi::saveSceneImage(QString fileName)
     if (!_parent) return false;
     UmlMainWidget* wgt = static_cast<UmlMainWidget*>(_parent);
     return wgt->savePicture(fileName);
+}
+
+bool UmlApi::saveDomainFile(QString fileName)
+{
+  QFile file(fileName);
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    return false;
+  }
+
+  QDataStream stream(&file);
+  _scene->writeItemsToBinaryStream(stream);
+  file.close();
+  return true;
+}
+
+bool UmlApi::loadDomainFile(QString fileName)
+{
+  QFile file(fileName);
+  if (!file.open(QIODevice::ReadOnly)) {
+    return false;
+  }
+
+  QDataStream stream(&file);
+  _scene->readItemsFromBinaryStream(stream);
+  file.close();
+  return true;
 }

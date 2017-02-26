@@ -29,6 +29,8 @@ public slots:
     bool onSaveAsPicture();
     void onAddLine();
     bool onLineCreated(DomainArrow* arrow);
+    void onBinarySave();
+    void onBinaryLoad();
 };
 
 #endif // UMLMAINWIDGET_H

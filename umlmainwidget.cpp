@@ -13,7 +13,9 @@ UmlMainWidget::UmlMainWidget(QWidget *parent) : QWidget(parent)
   connect(addRectangleButton, &QPushButton::clicked, this, &UmlMainWidget::onAddRectangle);
   connect(saveAsPictureButton, &QPushButton::clicked, this, &UmlMainWidget::onSaveAsPicture);
   connect(addLineButton, &QPushButton::clicked, this, &UmlMainWidget::onAddLine);
-  connect(_scene, &DomainScene::lineCreated, this, &UmlMainWidget::onLineCreated); 
+  connect(_scene, &DomainScene::lineCreated, this, &UmlMainWidget::onLineCreated);
+  connect(saveBinaryButton, &QPushButton::clicked, this, &UmlMainWidget::onBinarySave);
+  connect(loadBinaryButton, &QPushButton::clicked, this, &UmlMainWidget::onBinaryLoad);
 }
 
 UmlMainWidget::~UmlMainWidget()
@@ -43,7 +45,7 @@ bool UmlMainWidget::onSaveAsPicture()
   QString fileName = QFileDialog::getSaveFileName(this, "Сохранить рисунок", QCoreApplication::applicationDirPath(), "BMP Files (*.bmp);;JPEG (*.JPEG);;PNG (*.png)");
   if (!fileName.isNull())
   {
-      savePicture(fileName);
+    savePicture(fileName);
   }
   return false;
 }
@@ -71,8 +73,34 @@ bool UmlMainWidget::onLineCreated(DomainArrow *arrow)
   }
 }
 
+void UmlMainWidget::onBinarySave()
+{
+  QString fileName = QFileDialog::getSaveFileName(this, "Сохранить диаграмму", QCoreApplication::applicationDirPath(), "Domain Diagram Files (*.ddf)");
+  if (!fileName.isNull())
+  {
+    QFile file(fileName);
+    file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    QDataStream stream(&file);
+    _scene->writeItemsToBinaryStream(stream);
+    file.close();
+  }
+}
+
+void UmlMainWidget::onBinaryLoad()
+{
+  QString fileName = QFileDialog::getOpenFileName(this, "Загрузить диаграмму", QCoreApplication::applicationDirPath(), "Domain Diagram Files (*.ddf)");
+  if (!fileName.isNull())
+  {
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QDataStream stream(&file);
+    _scene->readItemsFromBinaryStream(stream);
+    file.close();
+  }
+}
+
 bool UmlMainWidget::savePicture(QString fileName)
 {
-    QPixmap pixMap = this->graphicsView->grab();
-    return pixMap.save(fileName);
+  QPixmap pixMap = this->graphicsView->grab();
+  return pixMap.save(fileName);
 }

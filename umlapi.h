@@ -20,6 +20,8 @@ public slots:
     void dumpScene();
     bool removeItem(QString itemText);
     bool saveSceneImage(QString fileName);
+    bool saveDomainFile(QString fileName);
+    bool loadDomainFile(QString fileName);
 
 private:
     DomainScene* _scene;
