@@ -12,9 +12,10 @@ class DomainScene : public QGraphicsScene
   Q_OBJECT
 
 public:
-  enum Mode { InsertItem, InsertLine, MoveItem };
+  enum Mode { InsertItem, InsertLine, MoveItem, DeleteItem };
   DomainScene();
   void setMode(int mode);
+  void deleteGraphicsItem(QGraphicsItem *item);
 
 public slots:
   bool saveImage(const QString &fileName, const char *fileFormat);

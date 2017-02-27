@@ -12,10 +12,12 @@ UmlMainWidget::UmlMainWidget(QWidget *parent) : QWidget(parent)
 
   connect(addRectangleButton, &QPushButton::clicked, this, &UmlMainWidget::onAddRectangle);
   connect(saveAsPictureButton, &QPushButton::clicked, this, &UmlMainWidget::onSaveAsPicture);
+  connect(saveUsecaseAsPictureButton, &QPushButton::clicked, this, &UmlMainWidget::onSaveAsPicture);
   connect(addLineButton, &QPushButton::clicked, this, &UmlMainWidget::onAddLine);
   connect(_scene, &DomainScene::lineCreated, this, &UmlMainWidget::onLineCreated);
   connect(saveBinaryButton, &QPushButton::clicked, this, &UmlMainWidget::onBinarySave);
   connect(loadBinaryButton, &QPushButton::clicked, this, &UmlMainWidget::onBinaryLoad);
+  connect(deleteItemButton, &QPushButton::clicked, this, &UmlMainWidget::onDeleteItem);
 }
 
 UmlMainWidget::~UmlMainWidget()
@@ -97,6 +99,11 @@ void UmlMainWidget::onBinaryLoad()
     _scene->readItemsFromBinaryStream(stream);
     file.close();
   }
+}
+
+void UmlMainWidget::onDeleteItem()
+{
+  _scene->setMode(DomainScene::DeleteItem);
 }
 
 bool UmlMainWidget::savePicture(QString fileName)

@@ -32,6 +32,10 @@ private:
     QList<DomainArrow*> _arrows;
     QString _containedText;
 
+    enum {
+      BORDER_OFFSET = 5
+    };
+
     // QGraphicsItem interface
 protected:
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;

@@ -31,6 +31,7 @@ public slots:
     bool onLineCreated(DomainArrow* arrow);
     void onBinarySave();
     void onBinaryLoad();
+    void onDeleteItem();
 };
 
 #endif // UMLMAINWIDGET_H

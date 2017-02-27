@@ -95,13 +95,40 @@ void DomainScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
   }
   else {
-    QGraphicsScene::mousePressEvent(event);
+    if (_mode == DeleteItem) {
+      QList<QGraphicsItem*> list = items(event->scenePos());
+      if (!list.isEmpty()) {
+        deleteGraphicsItem(list.first());
+      }
+      else {
+        _mode = MoveItem;
+      }
+    }
+    else
+      QGraphicsScene::mousePressEvent(event);
   }
 }
 
 void DomainScene::setMode(int mode)
 {
   _mode = mode;
+}
+
+void DomainScene::deleteGraphicsItem(QGraphicsItem *item)
+{
+  if (item->type() == DomainArrow::Type) {
+      DomainArrow* arrow = qgraphicsitem_cast<DomainArrow*>(item);
+      qgraphicsitem_cast<DomainItem*>(arrow->startItem())->removeArrow(arrow);
+      qgraphicsitem_cast<DomainItem*>(arrow->endItem())->removeArrow(arrow);
+      removeItem(arrow);
+      delete arrow;
+  }
+  if (item->type() == DomainItem::Type) {
+      DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(item);
+      domainIt->removeArrows();
+      removeItem(domainIt);
+      delete domainIt;
+  }
 }
 
 

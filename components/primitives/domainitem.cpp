@@ -32,7 +32,8 @@ void DomainItem::setContainedText(const QString &containedText)
 QRectF DomainItem::boundingRect() const
 {
   //TODO Ультраговнокод. Переделать как fontSize*string->size()
-  return QRectF(0, 0, _containedText.size()*7/* Типо fontSize */, 15 /* Высота шрифта + смещение? */);
+  return QRectF(0, 0, _containedText.size()*7/* Типо fontSize */+BORDER_OFFSET, 15 /* Высота шрифта + смещение? */+BORDER_OFFSET);
+//  return QRectF(0, 0, _containedText.size()*7/* Типо fontSize */, 15 /* Высота шрифта + смещение? */);
 }
 
 void DomainItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

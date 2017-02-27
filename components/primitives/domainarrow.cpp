@@ -24,7 +24,7 @@ QRectF DomainArrow::boundingRect() const
        .normalized()
        .adjusted(-extra, -extra, extra, extra);
 
-  QRectF textRect(line().pointAt(0.5).x(), line().pointAt(0.5).y(), _containedText.size()*7/* Типо fontSize */, 15 /* Высота шрифта + смещение? */);
+  QRectF textRect(line().pointAt(0.5).x(), line().pointAt(0.5).y(), _containedText.size()*8/* Типо fontSize */, 15 /* Высота шрифта + смещение? */);
 
   return retRect.united(textRect);
 

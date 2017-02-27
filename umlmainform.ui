@@ -28,13 +28,13 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="page">
+     <widget class="QWidget" name="domainPage">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
         <width>250</width>
-        <height>542</height>
+        <height>514</height>
        </rect>
       </property>
       <attribute name="label">
@@ -56,9 +56,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="saveBinaryButton">
+        <widget class="QPushButton" name="deleteItemButton">
          <property name="text">
-          <string>Сохранить</string>
+          <string>Удалить</string>
          </property>
         </widget>
        </item>
@@ -66,6 +66,13 @@
         <widget class="QPushButton" name="loadBinaryButton">
          <property name="text">
           <string>Открыть</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveBinaryButton">
+         <property name="text">
+          <string>Сохранить</string>
          </property>
         </widget>
        </item>
@@ -91,17 +98,80 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2">
+     <widget class="QWidget" name="usecasePage">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
         <width>250</width>
-        <height>542</height>
+        <height>514</height>
        </rect>
       </property>
       <attribute name="label">
        <string>Диаграмма прецедентов</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="addActorButton">
+         <property name="text">
+          <string>Актер</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="addLinkButton">
+         <property name="text">
+          <string>Связь</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="loadUsecaseBibaryButton">
+         <property name="text">
+          <string>Открыть</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveUsecaseBinaryButton">
+         <property name="text">
+          <string>Сохранить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveUsecaseAsPictureButton">
+         <property name="text">
+          <string>Сохранить как картинку</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="usecaseBlocksPage">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>250</width>
+        <height>514</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Диаграмма прецедентов: блок-схема</string>
       </attribute>
      </widget>
     </widget>

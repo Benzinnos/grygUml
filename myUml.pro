@@ -29,14 +29,16 @@ SOURCES += main.cpp\
     components/scenes/domainscene.cpp \
     components/primitives/domainitem.cpp \
     components/primitives/domainarrow.cpp \
-    umlapi.cpp
+    umlapi.cpp \
+    components/primitives/usecaseactor.cpp
 
 HEADERS  += mainwindow.h \
     umlmainwidget.h \
     components/scenes/domainscene.h \
     components/primitives/domainitem.h \
     components/primitives/domainarrow.h \
-    umlapi.h
+    umlapi.h \
+    components/primitives/usecaseactor.h
 
 FORMS += \
     umlmainform.ui
