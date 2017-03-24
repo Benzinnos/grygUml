@@ -13,7 +13,8 @@ class UmlMainWidget : public QWidget, Ui_Form
 {
     Q_OBJECT
 
-    DomainScene* _scene;
+    DomainScene* _domainScene;
+//    UsecaseScene* _usecaseScene;
 
 public:
     explicit UmlMainWidget(QWidget *parent = 0);

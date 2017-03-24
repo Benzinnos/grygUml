@@ -32,9 +32,9 @@ void DomainScene::writeItemsToBinaryStream(QDataStream &out)
   foreach (QGraphicsItem* it, items()) {
     out << static_cast<quint32>(it->type());
     switch (it->type()) {
-    case DomainItem::Type:
-      out << *qgraphicsitem_cast<DomainItem*>(it);
-      break;
+//    case DomainItem::Type:
+//      out << *qgraphicsitem_cast<DomainItem*>(it);
+//      break;
     case DomainArrow::Type:
       out << *qgraphicsitem_cast<DomainArrow*>(it);
       break;
@@ -54,12 +54,12 @@ void DomainScene::readItemsFromBinaryStream(QDataStream &in)
     quint32 type;
     in >> type;
     switch (static_cast<int>(type)) {
-    case DomainItem::Type: {
-      DomainItem *domainItem = new DomainItem();
-      in >> *domainItem;
-      addItem(domainItem);
-      break;
-    }
+//    case DomainItem::Type: {
+//      DomainItem *domainItem = new DomainItem();
+//      in >> *domainItem;
+//      addItem(domainItem);
+//      break;
+//    }
     case DomainArrow::Type: {
       QPointF firstItemPosition;
       QPointF endItemPosition;
@@ -67,8 +67,8 @@ void DomainScene::readItemsFromBinaryStream(QDataStream &in)
          >> endItemPosition;
       DomainArrow *domainArrow = new DomainArrow(itemAt(firstItemPosition, QTransform()), itemAt(endItemPosition, QTransform()));
       in >> *domainArrow;
-      qgraphicsitem_cast<DomainItem*>(itemAt(firstItemPosition, QTransform()))->addArrow(domainArrow);
-      qgraphicsitem_cast<DomainItem*>(itemAt(endItemPosition, QTransform()))->addArrow(domainArrow);
+//      qgraphicsitem_cast<DomainItem*>(itemAt(firstItemPosition, QTransform()))->addArrow(domainArrow);
+//      qgraphicsitem_cast<DomainItem*>(itemAt(endItemPosition, QTransform()))->addArrow(domainArrow);
       addItem(domainArrow);
       break;
     }
@@ -118,17 +118,17 @@ void DomainScene::deleteGraphicsItem(QGraphicsItem *item)
 {
   if (item->type() == DomainArrow::Type) {
       DomainArrow* arrow = qgraphicsitem_cast<DomainArrow*>(item);
-      qgraphicsitem_cast<DomainItem*>(arrow->startItem())->removeArrow(arrow);
-      qgraphicsitem_cast<DomainItem*>(arrow->endItem())->removeArrow(arrow);
+//      qgraphicsitem_cast<DomainItem*>(arrow->startItem())->removeArrow(arrow);
+//      qgraphicsitem_cast<DomainItem*>(arrow->endItem())->removeArrow(arrow);
       removeItem(arrow);
       delete arrow;
   }
-  if (item->type() == DomainItem::Type) {
-      DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(item);
-      domainIt->removeArrows();
-      removeItem(domainIt);
-      delete domainIt;
-  }
+//  if (item->type() == DomainItem::Type) {
+//      DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(item);
+//      domainIt->removeArrows();
+//      removeItem(domainIt);
+//      delete domainIt;
+//  }
 }
 
 
@@ -139,8 +139,8 @@ void DomainScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if (!list.isEmpty()) {
       _seccondItem = list.first();
       DomainArrow* arrow = new DomainArrow(_firstItem, _seccondItem);
-      qgraphicsitem_cast<DomainItem*>(_firstItem)->addArrow(arrow);
-      qgraphicsitem_cast<DomainItem*>(_seccondItem)->addArrow(arrow);
+//      qgraphicsitem_cast<DomainItem*>(_firstItem)->addArrow(arrow);
+//      qgraphicsitem_cast<DomainItem*>(_seccondItem)->addArrow(arrow);
       emit lineCreated(arrow);
     }
   }

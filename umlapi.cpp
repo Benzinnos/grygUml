@@ -12,7 +12,7 @@ UmlApi::UmlApi(DomainScene *scene, QObject *parent)
 void UmlApi::recursiveShift(QGraphicsItem* item)
 {
     foreach (QGraphicsItem* it, _scene->items()) {
-        if (it->type() != DomainItem::Type) continue;
+//        if (it->type() != DomainItem::Type) continue;
         if (it == item) continue;
         if (item->collidesWithItem(it)) {
             item->moveBy(30.0, 0);
@@ -26,22 +26,22 @@ void UmlApi::recursiveShift(QGraphicsItem* item)
 
 void UmlApi::addDomainItem(QString itemText)
 {
-    DomainItem* item = new DomainItem();
-    item->setContainedText(itemText);
-    _scene->addItem(item);
+//    DomainItem* item = new DomainItem();
+//    item->setContainedText(itemText);
+//    _scene->addItem(item);
     /*
      * TODO Тут должен быть менеджер компоновки
      * А пока тут просто сдвиг айтема при коллизии
      */
-    recursiveShift(item);
+//    recursiveShift(item);
 }
 
 void UmlApi::addDomainItem(QString itemText, QPointF pos)
 {
-    DomainItem* item = new DomainItem();
-    item->setContainedText(itemText);
-    _scene->addItem(item);
-    item->setPos(pos);
+//    DomainItem* item = new DomainItem();
+//    item->setContainedText(itemText);
+//    _scene->addItem(item);
+//    item->setPos(pos);
 }
 
 bool UmlApi::addDomainLine(QString startItemText, QString endItemText, QString lineText)
@@ -52,17 +52,17 @@ bool UmlApi::addDomainLine(QString startItemText, QString endItemText, QString l
     QGraphicsItem* startItem = nullptr;
     QGraphicsItem* endItem = nullptr;
     foreach (QGraphicsItem* it, _scene->items()) {
-        if (it->type() != DomainItem::Type) continue;
-        DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(it);
-        if (domainIt->containedText() == startItemText) {
-            startItem = it;
-        }
-        if (domainIt->containedText() == endItemText) {
-            endItem = it;
-        }
-        if ((startItem != nullptr) && (endItem != nullptr)) {
-            break;
-        }
+//        if (it->type() != DomainItem::Type) continue;
+//        DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(it);
+//        if (domainIt->containedText() == startItemText) {
+//            startItem = it;
+//        }
+//        if (domainIt->containedText() == endItemText) {
+//            endItem = it;
+//        }
+//        if ((startItem != nullptr) && (endItem != nullptr)) {
+//            break;
+//        }
     }
     if ((startItem != nullptr) && (endItem != nullptr)) {
         DomainArrow* arrow = new DomainArrow(startItem, endItem);
@@ -77,14 +77,14 @@ bool UmlApi::addDomainLine(QString startItemText, QString endItemText, QString l
 
 bool UmlApi::moveDomainItem(QString itemText, QPointF newPos)
 {
-    foreach (QGraphicsItem* it, _scene->items()) {
-        if (it->type() != DomainItem::Type) continue;
-        DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(it);
-        if (domainIt->containedText() == itemText) {
-            domainIt->setPos(newPos);
-            return true;
-        }
-    }
+//    foreach (QGraphicsItem* it, _scene->items()) {
+//        if (it->type() != DomainItem::Type) continue;
+//        DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(it);
+//        if (domainIt->containedText() == itemText) {
+//            domainIt->setPos(newPos);
+//            return true;
+//        }
+//    }
     return false;
 }
 
@@ -97,16 +97,16 @@ void UmlApi::dumpScene()
         if (it->type() == DomainArrow::Type) {
             DomainArrow* arrow = qgraphicsitem_cast<DomainArrow*>(it);
             qDebug() << QString("Arrow contained text: %1").arg(arrow->containedText());
-            DomainItem* item = qgraphicsitem_cast<DomainItem*>(arrow->startItem());
-            qDebug() << QString("Arrow start item: %1, x=%2, y=%3").arg(item->containedText()).arg(item->scenePos().x()).arg(item->scenePos().y());
-            item = qgraphicsitem_cast<DomainItem*>(arrow->endItem());
-            qDebug() << QString("Arrow end item: %1, x=%2, y=%3").arg(item->containedText()).arg(item->scenePos().x()).arg(item->scenePos().y());
+//            DomainItem* item = qgraphicsitem_cast<DomainItem*>(arrow->startItem());
+//            qDebug() << QString("Arrow start item: %1, x=%2, y=%3").arg(item->containedText()).arg(item->scenePos().x()).arg(item->scenePos().y());
+//            item = qgraphicsitem_cast<DomainItem*>(arrow->endItem());
+//            qDebug() << QString("Arrow end item: %1, x=%2, y=%3").arg(item->containedText()).arg(item->scenePos().x()).arg(item->scenePos().y());
         }
-        if (it->type() == DomainItem::Type) {
-            DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(it);
-            qDebug() << QString("Item contained text: %1").arg(domainIt->containedText());
-            // TODO Также можно вывести айтемы, связанные стрелкой, так как стрелка имеет указатели на айтемы.
-        }
+//        if (it->type() == DomainItem::Type) {
+//            DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(it);
+//            qDebug() << QString("Item contained text: %1").arg(domainIt->containedText());
+//            // TODO Также можно вывести айтемы, связанные стрелкой, так как стрелка имеет указатели на айтемы.
+//        }
     }
 }
 
@@ -116,22 +116,17 @@ bool UmlApi::removeItem(QString itemText)
         if (it->type() == DomainArrow::Type) {
             DomainArrow* arrow = qgraphicsitem_cast<DomainArrow*>(it);
             if (arrow->containedText() == itemText) {
-                qgraphicsitem_cast<DomainItem*>(arrow->startItem())->removeArrow(arrow);
-                qgraphicsitem_cast<DomainItem*>(arrow->endItem())->removeArrow(arrow);
-                _scene->removeItem(arrow);
-                delete arrow;
-                return true;
+              _scene->deleteGraphicsItem(it);
+              return true;
             }
         }
-        if (it->type() == DomainItem::Type) {
-            DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(it);
-            if (domainIt->containedText() == itemText) {
-                domainIt->removeArrows();
-                _scene->removeItem(domainIt);
-                delete domainIt;
-                return true;
-            }
-        }
+//        if (it->type() == DomainItem::Type) {
+//            DomainItem* domainIt = qgraphicsitem_cast<DomainItem*>(it);
+//            if (domainIt->containedText() == itemText) {
+//                _scene->deleteGraphicsItem(it);
+//                return true;
+//            }
+//        }
     }
     return false;
 }

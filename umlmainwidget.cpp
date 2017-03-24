@@ -2,19 +2,40 @@
 #include <QFileDialog>
 #include <QInputDialog>
 
+//#include"components/primitives/usecaseactor.h"
+#include "components/primitives/domainitem.h"
+#include "components/primitives/umllineitem.h"
+
+using namespace UmlDesigner;
+
 UmlMainWidget::UmlMainWidget(QWidget *parent) : QWidget(parent)
 {
-  _scene = new DomainScene();
-  api = new UmlApi(_scene, this);
+  _domainScene = new DomainScene();
+  api = new UmlApi(_domainScene, this);
   setupUi(this);
-  graphicsView->setScene(_scene);
+  graphicsView->setScene(_domainScene);
+
+  //DELL Debug
+//  _domainScene->addItem(new UseCaseActor());
+
+  UmlPrimitives::DomainItem *itemF = new UmlPrimitives::DomainItem();
+  itemF->setContainedText("First");
+  UmlPrimitives::DomainItem *itemL = new UmlPrimitives::DomainItem();
+  itemL->setContainedText("Last");
+  _domainScene->addItem(itemF);
+  _domainScene->addItem(itemL);
+  itemL->moveBy(50, 50);
+
+  UmlPrimitives::UmlLineItem *line = new UmlPrimitives::UmlLineItem(itemF, itemL);
+  _domainScene->addItem(line);
+
 
 
   connect(addRectangleButton, &QPushButton::clicked, this, &UmlMainWidget::onAddRectangle);
   connect(saveAsPictureButton, &QPushButton::clicked, this, &UmlMainWidget::onSaveAsPicture);
   connect(saveUsecaseAsPictureButton, &QPushButton::clicked, this, &UmlMainWidget::onSaveAsPicture);
   connect(addLineButton, &QPushButton::clicked, this, &UmlMainWidget::onAddLine);
-  connect(_scene, &DomainScene::lineCreated, this, &UmlMainWidget::onLineCreated);
+  connect(_domainScene, &DomainScene::lineCreated, this, &UmlMainWidget::onLineCreated);
   connect(saveBinaryButton, &QPushButton::clicked, this, &UmlMainWidget::onBinarySave);
   connect(loadBinaryButton, &QPushButton::clicked, this, &UmlMainWidget::onBinaryLoad);
   connect(deleteItemButton, &QPushButton::clicked, this, &UmlMainWidget::onDeleteItem);
@@ -22,7 +43,7 @@ UmlMainWidget::UmlMainWidget(QWidget *parent) : QWidget(parent)
 
 UmlMainWidget::~UmlMainWidget()
 {
-  foreach (QGraphicsItem* item, _scene->items()) {
+  foreach (QGraphicsItem* item, _domainScene->items()) {
     delete item;
   }
 }
@@ -30,11 +51,11 @@ UmlMainWidget::~UmlMainWidget()
 bool UmlMainWidget::onAddRectangle()
 {
   bool ok(false);
-  QString str = QInputDialog::getText(this, "Введите текст", "Текст", QLineEdit::Normal, QString("New_domain_item %1").arg(_scene->items().size()), &ok);
+  QString str = QInputDialog::getText(this, "Введите текст", "Текст", QLineEdit::Normal, QString("New_domain_item %1").arg(_domainScene->items().size()), &ok);
   if (ok) {
-    DomainItem* item = new DomainItem();
-    item->setContainedText(str);
-    _scene->addItem(item);
+//    DomainItem* item = new DomainItem();
+//    item->setContainedText(str);
+//    _domainScene->addItem(item);
     return true;
   }
   else {
@@ -54,21 +75,21 @@ bool UmlMainWidget::onSaveAsPicture()
 
 void UmlMainWidget::onAddLine()
 {
-  _scene->setMode(DomainScene::InsertLine);
+  _domainScene->setMode(DomainScene::InsertLine);
 }
 
 bool UmlMainWidget::onLineCreated(DomainArrow *arrow)
 {
   bool ok(false);
-  QString str = QInputDialog::getText(this, "Введите текст", "Текст", QLineEdit::Normal, QString("New_domain_item %1").arg(_scene->items().size()), &ok);
+  QString str = QInputDialog::getText(this, "Введите текст", "Текст", QLineEdit::Normal, QString("New_domain_item %1").arg(_domainScene->items().size()), &ok);
   if (ok) {
     arrow->setContainedText(str);
-    _scene->addItem(arrow);
+    _domainScene->addItem(arrow);
     return true;
   }
   else {
-    qgraphicsitem_cast<DomainItem*>(arrow->startItem())->removeArrow(arrow);
-    qgraphicsitem_cast<DomainItem*>(arrow->endItem())->removeArrow(arrow);
+//    qgraphicsitem_cast<DomainItem*>(arrow->startItem())->removeArrow(arrow);
+//    qgraphicsitem_cast<DomainItem*>(arrow->endItem())->removeArrow(arrow);
     delete arrow;
 
     return false;
@@ -83,7 +104,7 @@ void UmlMainWidget::onBinarySave()
     QFile file(fileName);
     file.open(QIODevice::WriteOnly | QIODevice::Truncate);
     QDataStream stream(&file);
-    _scene->writeItemsToBinaryStream(stream);
+    _domainScene->writeItemsToBinaryStream(stream);
     file.close();
   }
 }
@@ -96,14 +117,14 @@ void UmlMainWidget::onBinaryLoad()
     QFile file(fileName);
     file.open(QIODevice::ReadOnly);
     QDataStream stream(&file);
-    _scene->readItemsFromBinaryStream(stream);
+    _domainScene->readItemsFromBinaryStream(stream);
     file.close();
   }
 }
 
 void UmlMainWidget::onDeleteItem()
 {
-  _scene->setMode(DomainScene::DeleteItem);
+  _domainScene->setMode(DomainScene::DeleteItem);
 }
 
 bool UmlMainWidget::savePicture(QString fileName)
