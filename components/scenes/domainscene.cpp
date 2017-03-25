@@ -3,6 +3,8 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 
+using namespace UmlDesigner::UmlPrimitives;
+
 DomainScene::DomainScene()
   : _mode(MoveItem), _firstItem(nullptr), _seccondItem(nullptr)
 {
@@ -29,53 +31,53 @@ bool DomainScene::saveImage(const QString &fileName, const char *fileFormat)
 void DomainScene::writeItemsToBinaryStream(QDataStream &out)
 {
   // TODO Шаблонный метод
-  foreach (QGraphicsItem* it, items()) {
-    out << static_cast<quint32>(it->type());
-    switch (it->type()) {
-//    case DomainItem::Type:
-//      out << *qgraphicsitem_cast<DomainItem*>(it);
+//  foreach (QGraphicsItem* it, items()) {
+//    out << static_cast<quint32>(it->type());
+//    switch (it->type()) {
+////    case DomainItem::Type:
+////      out << *qgraphicsitem_cast<DomainItem*>(it);
+////      break;
+//    case DomainArrow::Type:
+//      out << *qgraphicsitem_cast<DomainArrow*>(it);
 //      break;
-    case DomainArrow::Type:
-      out << *qgraphicsitem_cast<DomainArrow*>(it);
-      break;
-    default:
-      break;
-    }
-  }
+//    default:
+//      break;
+//    }
+//  }
 }
 
 void DomainScene::readItemsFromBinaryStream(QDataStream &in)
 {
-  clear();
+//  clear();
 
-  // TODO Шаблонный метод
-  // Список должен быть отсортирован. Элементы типа DomainItem должны быть первыми для корректного создания DomainArrow.
-  while(!in.atEnd()) {
-    quint32 type;
-    in >> type;
-    switch (static_cast<int>(type)) {
-//    case DomainItem::Type: {
-//      DomainItem *domainItem = new DomainItem();
-//      in >> *domainItem;
-//      addItem(domainItem);
+//  // TODO Шаблонный метод
+//  // Список должен быть отсортирован. Элементы типа DomainItem должны быть первыми для корректного создания DomainArrow.
+//  while(!in.atEnd()) {
+//    quint32 type;
+//    in >> type;
+//    switch (static_cast<int>(type)) {
+////    case DomainItem::Type: {
+////      DomainItem *domainItem = new DomainItem();
+////      in >> *domainItem;
+////      addItem(domainItem);
+////      break;
+////    }
+//    case DomainArrow::Type: {
+//      QPointF firstItemPosition;
+//      QPointF endItemPosition;
+//      in >> firstItemPosition
+//         >> endItemPosition;
+//      DomainArrow *domainArrow = new DomainArrow(itemAt(firstItemPosition, QTransform()), itemAt(endItemPosition, QTransform()));
+//      in >> *domainArrow;
+////      qgraphicsitem_cast<DomainItem*>(itemAt(firstItemPosition, QTransform()))->addArrow(domainArrow);
+////      qgraphicsitem_cast<DomainItem*>(itemAt(endItemPosition, QTransform()))->addArrow(domainArrow);
+//      addItem(domainArrow);
 //      break;
 //    }
-    case DomainArrow::Type: {
-      QPointF firstItemPosition;
-      QPointF endItemPosition;
-      in >> firstItemPosition
-         >> endItemPosition;
-      DomainArrow *domainArrow = new DomainArrow(itemAt(firstItemPosition, QTransform()), itemAt(endItemPosition, QTransform()));
-      in >> *domainArrow;
-//      qgraphicsitem_cast<DomainItem*>(itemAt(firstItemPosition, QTransform()))->addArrow(domainArrow);
-//      qgraphicsitem_cast<DomainItem*>(itemAt(endItemPosition, QTransform()))->addArrow(domainArrow);
-      addItem(domainArrow);
-      break;
-    }
-    default:
-      break;
-    }
-  }
+//    default:
+//      break;
+//    }
+//  }
 
 }
 

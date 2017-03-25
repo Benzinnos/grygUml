@@ -2,11 +2,17 @@
 #include <QFileDialog>
 #include <QInputDialog>
 
-//#include"components/primitives/usecaseactor.h"
+#include "components/primitives/usecaseactor.h"
 #include "components/primitives/domainitem.h"
 #include "components/primitives/umllineitem.h"
+#include "components/primitives/domainarrow.h"
+#include "components/primitives/usecaseline.h"
+#include "components/primitives/usecaseaction.h"
+#include "components/primitives/componentsitem.h"
+#include "components/primitives/componentsline.h"
 
 using namespace UmlDesigner;
+using namespace UmlDesigner::UmlPrimitives;
 
 UmlMainWidget::UmlMainWidget(QWidget *parent) : QWidget(parent)
 {
@@ -16,8 +22,6 @@ UmlMainWidget::UmlMainWidget(QWidget *parent) : QWidget(parent)
   graphicsView->setScene(_domainScene);
 
   //DELL Debug
-//  _domainScene->addItem(new UseCaseActor());
-
   UmlPrimitives::DomainItem *itemF = new UmlPrimitives::DomainItem();
   itemF->setContainedText("First");
   UmlPrimitives::DomainItem *itemL = new UmlPrimitives::DomainItem();
@@ -26,9 +30,24 @@ UmlMainWidget::UmlMainWidget(QWidget *parent) : QWidget(parent)
   _domainScene->addItem(itemL);
   itemL->moveBy(50, 50);
 
-  UmlPrimitives::UmlLineItem *line = new UmlPrimitives::UmlLineItem(itemF, itemL);
+  DomainArrow *dline = new DomainArrow(itemF, itemL);
+  _domainScene->addItem(dline);
+
+
+  UseCaseActor *act = new UseCaseActor();
+  _domainScene->addItem(act);
+  UseCaseAction *action = new UseCaseAction();
+  _domainScene->addItem(action);
+  action->moveBy(100, 100);
+  UseCaseLine *line = new UseCaseLine(act, action);
   _domainScene->addItem(line);
 
+  ComponentsItem *comp1 = new ComponentsItem();
+  ComponentsItem *comp2 = new ComponentsItem();
+  ComponentsLine *cline = new ComponentsLine(comp1, comp2);
+  _domainScene->addItem(comp1);
+  _domainScene->addItem(comp2);
+  _domainScene->addItem(cline);
 
 
   connect(addRectangleButton, &QPushButton::clicked, this, &UmlMainWidget::onAddRectangle);

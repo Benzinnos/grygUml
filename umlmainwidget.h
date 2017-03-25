@@ -29,7 +29,7 @@ public slots:
     bool onAddRectangle();
     bool onSaveAsPicture();
     void onAddLine();
-    bool onLineCreated(DomainArrow* arrow);
+    bool onLineCreated(UmlDesigner::UmlPrimitives::DomainArrow* arrow);
     void onBinarySave();
     void onBinaryLoad();
     void onDeleteItem();

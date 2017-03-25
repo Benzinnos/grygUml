@@ -33,7 +33,7 @@ private:
   QGraphicsItem* _seccondItem;
 
 signals:
-  void lineCreated(DomainArrow* arrow);
+  void lineCreated(UmlDesigner::UmlPrimitives::DomainArrow* arrow);
 };
 
 #endif // DOMAINSCENE_H

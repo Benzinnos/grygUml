@@ -1,15 +1,15 @@
 #include "usecaseactor.h"
 
-#include <QPainter>
 #include <QLinearGradient>
-#include <QInputDialog>
+#include <QPainter>
 
-// TODO Рефакторинг, убрать дублирование кода
+using namespace UmlDesigner;
+using namespace UmlDesigner::UmlPrimitives;
 
 UseCaseActor::UseCaseActor()
-  : DomainItem()
-{  
-  _containedText = "Actor\nnewlineeeee\nnewline\nnewline";
+  : AbstractUmlItem()
+{
+  _containedText = "Usecase Actor";
 }
 
 QRectF UseCaseActor::boundingRect() const
@@ -20,7 +20,6 @@ QRectF UseCaseActor::boundingRect() const
                 -8,
                 _textRect.width()/lines >= 24 ? _textRect.width()/lines : 24, // Скейлинг относительно ширины текста
                 50 + _textRect.height() * lines);
-
 }
 
 void UseCaseActor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -28,22 +27,8 @@ void UseCaseActor::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
   Q_UNUSED(option)
   Q_UNUSED(widget)
 
-  // Определить самую широкую линию через .split('\n').length
-//  QStringList strList = _containedText.split('\n');
-//  QString maxString;
-
-//  foreach (QString str, strList) {
-//    maxString = str.size() > maxString.size() ? str : maxString;
-//  }
-
-
   _textRect = painter->fontMetrics().boundingRect(QRect(0, 45, 0, 0), Qt::TextWordWrap | Qt::AlignHCenter, _containedText);
-  painter->drawRect(QRect(-10, -8, 20, 50));
-  painter->drawRect(_textRect);
   painter->drawText(_textRect, Qt::AlignHCenter, _containedText);
-
-
-//  painter->drawRect(boundingRect());
 
   // Залив башки
   QLinearGradient gradient(QPointF(-10, 0), QPointF(10,0));
@@ -62,10 +47,12 @@ void UseCaseActor::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
         QPointF(0, 30), QPointF(10, 40) //Правая нога
   };
 
+  // Paint
+  if (isSelected()) {
+    painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
+  }
+
   painter->drawLines(points);
-
-//  painter->drawText(boundingRect(), Qt::AlignBottom, _containedText);
-
 }
 
 

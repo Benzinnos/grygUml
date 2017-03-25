@@ -1,5 +1,5 @@
-#ifndef USECASEACTOR_H
-#define USECASEACTOR_H
+#ifndef COMPONENTSITEM_H
+#define COMPONENTSITEM_H
 
 #include <QObject>
 
@@ -8,11 +8,17 @@
 namespace UmlDesigner {
 namespace UmlPrimitives {
 
-class UseCaseActor : public AbstractUmlItem
+class ComponentsItem : public AbstractUmlItem
 {
+  enum {
+    BORDER_OFFSET = 5
+  };
+  QRectF _topRect;
+
 public:
-  UseCaseActor();
-  enum { Type = USECASEACTOR_TYPE };
+  enum { Type = COMPONENTSITEM_TYPE };
+
+  ComponentsItem();
 
   // QGraphicsItem interface
 public:
@@ -24,4 +30,4 @@ public:
 }
 }
 
-#endif // USECASEACTOR_H
+#endif // COMPONENTSITEM_H

@@ -30,9 +30,13 @@ SOURCES += main.cpp\
     components/primitives/domainitem.cpp \
     components/primitives/domainarrow.cpp \
     umlapi.cpp \
-#    components/primitives/usecaseactor.cpp \
+    components/primitives/usecaseactor.cpp \
     components/primitives/abstractumlitem.cpp \
-    components/primitives/umllineitem.cpp
+    components/primitives/umllineitem.cpp \
+    components/primitives/usecaseline.cpp \
+    components/primitives/usecaseaction.cpp \
+    components/primitives/componentsitem.cpp \
+    components/primitives/componentsline.cpp
 
 HEADERS  += mainwindow.h \
     umlmainwidget.h \
@@ -40,9 +44,14 @@ HEADERS  += mainwindow.h \
     components/primitives/domainitem.h \
     components/primitives/domainarrow.h \
     umlapi.h \
-#    components/primitives/usecaseactor.h \
+    components/primitives/usecaseactor.h \
     components/primitives/abstractumlitem.h \
-    components/primitives/umllineitem.h
+    components/primitives/umllineitem.h \
+    components/primitives/umltypes.h \
+    components/primitives/usecaseline.h \
+    components/primitives/usecaseaction.h \
+    components/primitives/componentsitem.h \
+    components/primitives/componentsline.h
 
 FORMS += \
     umlmainform.ui

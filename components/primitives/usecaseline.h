@@ -1,5 +1,5 @@
-#ifndef DOMAINARROW_H
-#define DOMAINARROW_H
+#ifndef USECASELINE_H
+#define USECASELINE_H
 
 #include <QObject>
 
@@ -8,11 +8,12 @@
 namespace UmlDesigner {
 namespace UmlPrimitives {
 
-class DomainArrow : public UmlLineItem
+class UseCaseLine : public UmlLineItem
 {
 public:
-  enum { Type = DOMAINARROW_TYPE };
-  explicit DomainArrow(QGraphicsItem* startItem, QGraphicsItem* endItem, QGraphicsItem* parent = nullptr);
+  enum { Type = USECASELINE_TYPE };
+
+  UseCaseLine(QGraphicsItem* startItem, QGraphicsItem* endItem, QGraphicsItem* parent = nullptr);
 
   // QGraphicsItem interface
 public:
@@ -26,4 +27,4 @@ protected:
 }
 }
 
-#endif // DOMAINARROW_H
+#endif // USECASELINE_H

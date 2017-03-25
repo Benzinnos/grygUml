@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QDataStream>
 
+using namespace UmlDesigner::UmlPrimitives;
+
 UmlApi::UmlApi(DomainScene *scene, QObject *parent)
     : _scene(scene), _parent(parent)
 {

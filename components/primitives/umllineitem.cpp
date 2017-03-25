@@ -1,6 +1,5 @@
 #include "umllineitem.h"
 
-#include <QPen>
 #include <QPainter>
 #include <QInputDialog>
 #include <math.h>
@@ -12,10 +11,13 @@ UmlLineItem::UmlLineItem(QGraphicsItem *startItem, QGraphicsItem *endItem, QGrap
   : QGraphicsLineItem(parent),
     _myStartItem(startItem),
     _myEndItem(endItem),
-    _containedText("Text")
+    _containedText("Text"),
+    _linePen(Qt::black, LINE_WIDTH, Qt::SolidLine),
+    _fillArrowHead(true)
 {
   setFlag(QGraphicsItem::ItemIsSelectable, true);
   setZValue(-1000.0);
+  setPen(_linePen);
 }
 
 void UmlLineItem::updatePosition()
@@ -41,8 +43,6 @@ QRectF UmlLineItem::boundingRect() const
                                      line().p2().y() - line().p1().y()))
        .normalized()
        .adjusted(-extra, -extra, extra, extra);
-
-//  QRectF textRect(line().pointAt(0.5).x(), line().pointAt(0.5).y(), _containedText.size()*8/* Типо fontSize */, 15 /* Высота шрифта + смещение? */);
 
   return retRect.united(_textRect);
 }
@@ -87,28 +87,23 @@ void UmlLineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
   setLine(QLineF(intersectPoint, QRectF(_myStartItem->pos(), _myStartItem->boundingRect().size()).center()));
 
   /* Arrow */
-  double angle = ::acos(line().dx() / line().length());
-  if (line().dy() >= 0)
-      angle = (M_PI * 2) - angle;
-
-  QPointF arrowP1 = line().p1() + QPointF(sin(angle + M_PI / 3) * _arrowSize,
-                                  cos(angle + M_PI / 3) * _arrowSize);
-  QPointF arrowP2 = line().p1() + QPointF(sin(angle + M_PI - M_PI / 3) * _arrowSize,
-                                  cos(angle + M_PI - M_PI / 3) * _arrowSize);
-
-  _arrowHead.clear();
-  _arrowHead << line().p1() << arrowP1 << arrowP2;
+  _arrowHead = createArrow(line().p1(), _arrowSize);
 
   /* Paint */
   painter->drawLine(line());
 
-  QPainterPath tmpPath;
-  tmpPath.addPolygon(_arrowHead);
-  painter->fillPath(tmpPath, QBrush (QColor ("black")));
+  if (_fillArrowHead) {
+    QPainterPath tmpPath;
+    tmpPath.addPolygon(_arrowHead);
+    painter->fillPath(tmpPath, QBrush (QColor ("black")));
+  }
+  else {
+    painter->drawPolygon(_arrowHead);
+  }
 
   /* On selected */
   if (isSelected()) {
-      painter->setPen(QPen(Qt::black, 1, Qt::DashLine));
+      painter->setPen(QPen(Qt::black, LINE_WIDTH, Qt::DashLine));
       QLineF myLine = line();
       myLine.translate(0, 4.0);
       painter->drawLine(myLine);
@@ -116,23 +111,26 @@ void UmlLineItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
       painter->drawLine(myLine);
   }
 
-  _textRect = painter->fontMetrics().boundingRect(boundingRect().toRect(), Qt::AlignCenter, _containedText);
+  _textRect = painter->fontMetrics().boundingRect(boundingRect().toRect(), Qt::AlignCenter,  _containedText);
   QPointF textPoint(_textRect.topLeft());
-//  textPoint.setY(textPoint.y() - 3/*_textRect.height()*/);
-
-
-//  QPointF textPoint(line().pointAt(0.5));
-//  textPoint.setX(textPoint.x() + 15);
-//  textPoint.setY(textPoint.y() - 3);
 
   _textRect = painter->fontMetrics().boundingRect(QRect(textPoint.toPoint(), QSize()), Qt::AlignCenter, _containedText);
 
   painter->drawText(_textRect, _containedText);
+}
 
+QPolygonF UmlLineItem::createArrow(QPointF p1, qreal size)
+{
+  double angle = ::acos(line().dx() / line().length());
+  if (line().dy() >= 0)
+      angle = (M_PI * 2) - angle;
 
-  painter->drawRect(boundingRect());
-  painter->drawRect(_textRect);
+  QPointF arrowP1 = p1 + QPointF(sin(angle + M_PI / 3) * size,
+                                  cos(angle + M_PI / 3) * size);
+  QPointF arrowP2 = p1 + QPointF(sin(angle + M_PI - M_PI / 3) * size,
+                                  cos(angle + M_PI - M_PI / 3) * size);
 
+  return QPolygonF() << p1 << arrowP1 << arrowP2;
 }
 
 int UmlLineItem::type() const
@@ -149,4 +147,30 @@ void UmlLineItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
   if (ok) {
     _containedText = str;
   }
+}
+
+
+/* Related non-member */
+
+QDataStream &operator<<(QDataStream &out, const UmlLineItem &lineItem)
+{
+  //FIXME Костыль с геттерами вместо friend funtions
+  out << lineItem.startItem()->pos()
+      << lineItem.endItem()->pos()
+      << lineItem.containedText();
+
+  return out;
+}
+
+QDataStream &operator>>(QDataStream &in, UmlLineItem &lineItem)
+{
+  QString containedText;
+
+  /* Позиции начального и конечного элементов считываются при создании объекта */
+  in >> containedText;
+
+  //FIXME Костыль с сеттерами вместо friend funtions
+  lineItem.setContainedText(containedText);
+
+  return in;
 }

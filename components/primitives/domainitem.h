@@ -12,7 +12,7 @@ namespace UmlPrimitives {
 class DomainItem : public AbstractUmlItem
 {
 public:
-  enum { Type = UserType + 1 };
+  enum { Type = DOMAINITEM_TYPE };
   DomainItem();
 
   // QGraphicsItem interface
